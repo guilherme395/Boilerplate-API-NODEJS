@@ -1,10 +1,12 @@
 const UserModel = require("../models/UserModel.js");
+const logError = require("../helpers/logger.js");
 
 class UserController {
     getAllUsers(req, res) {
         try {
-            UserModel.getAllUsers((err, rows) => {
-                if (err) {
+            UserModel.getAllUsers((error, rows) => {
+                if (error) {
+                    logError(error);
                     return res.status(500).json({
                         success: false,
                         message: "Internal server error."
@@ -17,7 +19,11 @@ class UserController {
                 });
             });
         } catch (error) {
-            throw new Error(error);
+            logError(error);
+            return res.status(500).json({
+                success: false,
+                message: "Something went wrong."
+            });
         }
     }
 
@@ -26,8 +32,9 @@ class UserController {
             const {
                 id
             } = req.params;
-            UserModel.getUserById(id, (err, user) => {
-                if (err) {
+            UserModel.getUserById(id, (error, user) => {
+                if (error) {
+                    logError(error);
                     return res.status(500).json({
                         success: false,
                         message: "Internal server error."
@@ -43,11 +50,14 @@ class UserController {
                     success: true,
                     message: "User Returned successfully.",
                     user: user
-                })
+                });
             });
-
         } catch (error) {
-            throw new Error(error);
+            logError(error);
+            return res.status(500).json({
+                success: false,
+                message: "Something went wrong."
+            });
         }
     }
 
@@ -66,8 +76,9 @@ class UserController {
                 });
             }
 
-            UserModel.createUser([name, email, pass], (err, lastID) => {
-                if (err) {
+            UserModel.createUser([name, email, pass], (error, lastID) => {
+                if (error) {
+                    logError(error);
                     return res.status(500).json({
                         success: false,
                         message: "Internal server error."
@@ -86,7 +97,11 @@ class UserController {
                 });
             });
         } catch (error) {
-            throw new Error(error);
+            logError(error);
+            return res.status(500).json({
+                success: false,
+                message: "Something went wrong."
+            });
         }
     }
 
@@ -108,8 +123,9 @@ class UserController {
                 });
             }
 
-            UserModel.updateUser(id, [name, email, pass], (err, changes) => {
-                if (err) {
+            UserModel.updateUser(id, [name, email, pass], (error, changes) => {
+                if (error) {
+                    logError(error);
                     return res.status(500).json({
                         success: false,
                         message: "Internal server error."
@@ -135,7 +151,11 @@ class UserController {
                 });
             });
         } catch (error) {
-            throw new Error(error);
+            logError(error);
+            return res.status(500).json({
+                success: false,
+                message: "Something went wrong."
+            });
         }
     }
 
@@ -145,8 +165,9 @@ class UserController {
                 id
             } = req.params;
 
-            UserModel.deleteUser(id, (err, changes) => {
-                if (err) {
+            UserModel.deleteUser(id, (error, changes) => {
+                if (error) {
+                    logError(error);
                     return res.status(500).json({
                         success: false,
                         message: "Internal server error."
@@ -166,7 +187,11 @@ class UserController {
                 });
             });
         } catch (error) {
-            throw new Error(error);
+            logError(error);
+            return res.status(500).json({
+                success: false,
+                message: "Something went wrong."
+            });
         }
     }
 }
